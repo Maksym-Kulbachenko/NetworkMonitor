@@ -1,0 +1,31 @@
+﻿@model IEnumerable<PortData>
+
+<table>
+    <thead>
+    <tr>
+        <th>Protocol</th>
+        <th>Local Address</th>
+        <th>Local Port</th>
+        <th>Foreign Address</th>
+        <th>Foreign Port</th>
+        <th>State</th>
+        <th>PID</th>
+        <th>Process Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Protocol</td>
+            <td>@item.LocalAddress</td>
+            <td>@item.LocalPort</td>
+            <td>@item.ForeignAddress</td>
+            <td>@item.ForeignPort</td>
+            <td>@item.State</td>
+            <td>@item.PID</td>
+            <td>@item.ProcessName</td>
+        </tr>
+    }
+    </tbody>
+</table>

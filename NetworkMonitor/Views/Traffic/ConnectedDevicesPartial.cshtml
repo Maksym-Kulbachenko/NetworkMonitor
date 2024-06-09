@@ -1,0 +1,21 @@
+﻿ @model List<ConnectedDevice>
+
+ <table>
+    <thead>
+    <tr>
+        <th>IP Address</th>
+        <th>MAC Address</th>
+        <th>Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.IpAddress</td>
+            <td>@item.MacAddress</td>
+            <td>@item.Type</td>
+        </tr>
+    }
+    </tbody>
+</table>

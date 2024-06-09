@@ -1,0 +1,73 @@
+﻿<h1>Network Traffic Data</h1>
+
+    <!-- Overall Traffic Data Section -->
+    <section>
+        <h2>Overall Traffic Data</h2>
+        <div id="overallTrafficDataContainer"></div>
+    </section>
+
+    <!-- Port Data Section -->
+    <section>
+        <h2>Port Data</h2>
+        <button id="loadPortDataBtn">Load Port Data</button>
+        <div id="portDataContainer"></div>
+    </section>
+
+    <!-- Connected Devices Section -->
+    <section>
+        <h2>Connected Devices</h2>
+        <button id="loadConnectedDevicesBtn">Load Connected Devices</button>
+        <div id="connectedDevicesContainer"></div>
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            // Load Overall Traffic Data
+            loadOverallTrafficData();
+
+            // Refresh Overall Traffic Data every 30 seconds
+            setInterval(loadOverallTrafficData, 30000);
+
+            // Load Overall Traffic Data
+            function loadOverallTrafficData() {
+                $.ajax({
+                    url: '@Url.Action("GetOverallTrafficData", "Traffic")',
+                    method: 'GET',
+                    success: function (data) {
+                        $('#overallTrafficDataContainer').html(data);
+                    },
+                    error: function () {
+                        alert('Error loading overall traffic data');
+                    }
+                });
+            }
+
+            // Load Port Data on button click
+            $('#loadPortDataBtn').click(function () {
+                $.ajax({
+                    url: '@Url.Action("GetPortData", "Traffic")',
+                    method: 'GET',
+                    success: function (data) {
+                        $('#portDataContainer').html(data);
+                    },
+                    error: function () {
+                        alert('Error loading port data');
+                    }
+                });
+            });
+
+            // Load Connected Devices on button click
+            $('#loadConnectedDevicesBtn').click(function () {
+                $.ajax({
+                    url: '@Url.Action("GetConnectedDevices", "Traffic")',
+                    method: 'GET',
+                    success: function (data) {
+                        $('#connectedDevicesContainer').html(data);
+                    },
+                    error: function () {
+                        alert('Error loading connected devices');
+                    }
+                });
+            });
+        });
+</script>

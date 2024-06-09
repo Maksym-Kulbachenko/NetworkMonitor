@@ -1,0 +1,112 @@
+﻿@model IEnumerable<NetworkMonitor.Models.NetworkStatistics>
+
+<canvas id="overallTrafficChart" width="400" height="200"></canvas>
+
+<div id="trafficDataDetails">
+    <table>
+        <thead>
+            <tr>
+                <th>Statistic</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Bytes Received</td><td id="bytesReceived"></td></tr>
+            <tr><td>Bytes Sent</td><td id="bytesSent"></td></tr>
+            <tr><td>Unicast Packets Received</td><td id="unicastPacketsReceived"></td></tr>
+            <tr><td>Unicast Packets Sent</td><td id="unicastPacketsSent"></td></tr>
+            <tr><td>Non-Unicast Packets Received</td><td id="nonUnicastPacketsReceived"></td></tr>
+            <tr><td>Non-Unicast Packets Sent</td><td id="nonUnicastPacketsSent"></td></tr>
+            <tr><td>Discards Received</td><td id="discardsReceived"></td></tr>
+            <tr><td>Discards Sent</td><td id="discardsSent"></td></tr>
+            <tr><td>Errors Received</td><td id="errorsReceived"></td></tr>
+            <tr><td>Errors Sent</td><td id="errorsSent"></td></tr>
+            <tr><td>Unknown Protocols Received</td><td id="unknownProtocolsReceived"></td></tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+  $(document).ready(function () {
+      var chartData = @Html.Raw(Json.Serialize(Model));
+
+      console.log(chartData);
+
+      let ctx = document.getElementById('overallTrafficChart').getContext('2d');
+
+      let overallTrafficChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: chartData.map(dataItem => dataItem.timestamp),
+              datasets: [
+                  {
+                      label: 'Bytes Received',
+                      data: chartData.map(dataItem => dataItem.bytesReceived),
+                      borderColor: 'rgba(75, 192, 192, 1)',
+                      borderWidth: 1,
+                      fill: false
+                  },
+                  {
+                      label: 'Bytes Sent',
+                      data: chartData.map(dataItem => dataItem.bytesSent),
+                      borderColor: 'rgba(255, 99, 132, 1)',
+                      borderWidth: 1,
+                      fill: false
+                  }
+              ]
+          },
+          options: {
+              responsive: true,
+              scales: {
+                  x: {
+                      type: 'time',
+                      time: {
+                          unit: 'minute'
+                      },
+                      title: {
+                          display: true,
+                          text: 'Time'
+                      }
+                  },
+                  y: {
+                      title: {
+                          display: true,
+                          text: 'Bytes'
+                      }
+                  }
+              },
+              plugins: {
+                  tooltip: {
+                      callbacks: {
+                          label: function (context) {
+                              var datasetLabel = context.dataset.label || '';
+                              var value = context.parsed.y;
+                              return datasetLabel + ': ' + value;
+                          }
+                      }
+                  }
+              },
+              onClick: (event, elements) => {
+                  if (elements.length > 0) {
+                      var element = elements[0];
+                      var index = element.index;
+                      var dataItem = chartData[index];
+
+                      document.getElementById('bytesReceived').innerText = dataItem.bytesReceived;
+                      document.getElementById('bytesSent').innerText = dataItem.bytesSent;
+                      document.getElementById('unicastPacketsReceived').innerText = dataItem.unicastPacketsReceived;
+                      document.getElementById('unicastPacketsSent').innerText = dataItem.unicastPacketsSent;
+                      document.getElementById('nonUnicastPacketsReceived').innerText = dataItem.nonUnicastPacketsReceived;
+                      document.getElementById('nonUnicastPacketsSent').innerText = dataItem.nonUnicastPacketsSent;
+                      document.getElementById('discardsReceived').innerText = dataItem.discardsReceived;
+                      document.getElementById('discardsSent').innerText = dataItem.discardsSent;
+                      document.getElementById('errorsReceived').innerText = dataItem.errorsReceived;
+                      document.getElementById('errorsSent').innerText = dataItem.errorsSent;
+                      document.getElementById('unknownProtocolsReceived').innerText = dataItem.unknownProtocolsReceived;
+                  }
+              }
+          }
+      });
+  });
+
+</script>
